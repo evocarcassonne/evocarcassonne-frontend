@@ -1,0 +1,124 @@
+<div class="container">
+  <div class="row" style="margin-top: 2rem;margin-bottom: 2rem;">
+    <div class="col-md-2 col-sm-1"></div>
+    <div class="col-md-8 col-sm-10 text-center">
+      <button
+        class="btn btn-secondary align-bottom"
+        (click)="getNewTile()"
+        style="margin-right: 1rem;"
+      >
+        Get new tile
+      </button>
+      <button class="btn btn-secondary align-bottom" (click)="endTurn()">
+        End turn
+      </button>
+    </div>
+    <br />
+    <div class="text-center row" style="margin-top: 2rem; width: 100%;">
+      <div class="align-bottom col-3">
+        <button class="btn btn-warning" (click)="rotate(-90)">
+          Rotate left
+        </button>
+      </div>
+      <div class="col-3">
+        <div
+          [ngStyle]="{
+            'width.px': 150,
+            'height.px': 150,
+            background:
+              'url(../assets/Tiles/' +
+              tile +
+              '.png) center center / cover no-repeat',
+            transform: 'rotate(' + tileToPlace.RotateAngle + 'deg)'
+          }"
+        ></div>
+      </div>
+      <div class="align-bottom col-3">
+        <button class="btn btn-warning align-bottom" (click)="rotate(90)">
+          Rotate right
+        </button>
+      </div>
+    </div>
+  </div>
+  <div
+    class="text-center"
+    style="position: absolute;
+  height: 80%;
+  width: 44%;
+  cursor: move;
+  z-index: 0;
+  background-color: bisque;"
+    mouseWheel
+    (mousedown)="onMoveStart($event)"
+    (mouseup)="onMoveEnd($event)"
+    (mousemove)="onMoving($event)"
+    (mouseenter)="mouseEnter($event)"
+    (mouseleave)="mouseLeave($event)"
+    (mouseWheelUp)="mouseWheelUp($event)"
+    (mouseWheelDown)="mouseWheelDown($event)"
+  >
+    <div
+      style="
+  width: 80%;
+  height: auto;
+  overflow: hidden;
+  z-index: 1;
+  text-align: center;
+  top: 1rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  z-index: 1;
+"
+    >
+      <div
+        id="gamePlayArea"
+        *ngFor="let tileonTable of tableInfo.tableInfo"
+        [ngStyle]="{
+          position: 'absolute',
+          height: 'min-content',
+          width: 'min-content',
+          'left.px': tileSize * tileonTable.position.x + shift.x,
+          'top.px': tileSize * tileonTable.position.y + shift.y
+        }"
+      >
+        <div
+          [ngStyle]="{
+            position: absolute,
+            'width.px': tileSize,
+            'height.px': tileSize,
+            display: 'block',
+            background: 'url(../assets/Tiles/' + tileonTable.tile + '.png)',
+            'background-size': 'cover',
+            'background-repeat': 'no-repeat',
+            transform: 'rotate(' + tileonTable.rotation + 'deg)'
+          }"
+        ></div>
+      </div>
+
+      <div
+        id="placeTileArea"
+        [ngStyle]="{
+          position: 'absolute',
+          height: 'min-content',
+          width: 'min-content',
+          'left.px': tileSize * pos.x + shift.x,
+          'top.px': tileSize * pos.y + shift.y
+        }"
+        *ngFor="let pos of placePositions"
+      >
+        <div
+          (click)="placeTile(pos.x, pos.y)"
+          [ngStyle]="{
+            position: absolute,
+            'width.px': tileSize,
+            'height.px': tileSize,
+            display: 'block',
+            background: 'url(../assets/place.jpg)',
+            'background-size': 'cover',
+            cursor: 'pointer'
+          }"
+        ></div>
+      </div>
+    </div>
+  </div>
+</div>
