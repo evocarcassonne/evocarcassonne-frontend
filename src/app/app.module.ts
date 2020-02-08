@@ -14,7 +14,6 @@ import { WaitingRoomComponent } from "./waiting-room/waitingroom";
 import { CreateComponent } from "./create-game/create.component";
 import { SubscribeComponent } from "./subscribe-game/subscribe.component";
 import { Navbar } from "./navbar/navbar";
-import { ColorGithubModule } from 'ngx-color/github';
 import { StatTableComponent } from './stat-table/stat-table.component';
 
 @NgModule({
@@ -34,7 +33,6 @@ import { StatTableComponent } from './stat-table/stat-table.component';
     HttpClientModule,
     AngularDraggableModule,
     AppRoutingModule,
-	ColorGithubModule
   ],
   bootstrap: [AppComponent],
   providers: [CookieService]

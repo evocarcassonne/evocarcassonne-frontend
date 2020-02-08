@@ -6,8 +6,6 @@ import { GamePlayService } from "../api/gameplay.service";
 import { CookieService } from "ngx-cookie-service";
 import { Router } from "@angular/router";
 import { TableInfo } from "../api/models/tableInfo";
-import { ColorGithubModule } from "ngx-color/github";
-import { ColorEvent } from "ngx-color";
 
 @Component({
   selector: "waiting-room",
@@ -18,7 +16,6 @@ export class WaitingRoomComponent implements OnInit {
   @Input() players: Array<PlayerInfo>;
   @Input() gameId: string;
   sub: Subscription;
-  showColorPicker: boolean = false;
 
   ngOnInit(): void {
     const source = interval(2000);
@@ -61,9 +58,5 @@ export class WaitingRoomComponent implements OnInit {
     } else {
       return "none";
     }
-  }
-
-  handleChange($event: ColorEvent, player: PlayerInfo) {
-    //player.color = $event.color.hex;
   }
 }

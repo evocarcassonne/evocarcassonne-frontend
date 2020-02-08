@@ -7,13 +7,8 @@
             <h3>{{player.name}}</h3>
           </div>
           <div class="col-6 text-right">
-			<color-github *ngIf="showColorPicker" style="z-index: 10; position: absolute; top: 5.8vh; left: 11vw;" (onChange)="handleChange($event, player)"></color-github>
-            <button
-              class="btn"
-              [ngStyle]="{'display': canModifyColor(player.playerId)}"
-			  [style.background-color]="player.color"
-			  (click)="showColorPicker=!showColorPicker"
-            >
+            <button class="btn"
+              [ngStyle]="{'display': canModifyColor(player.playerId), 'background-color': player.color}">
               Pick color
             </button>
           </div>
