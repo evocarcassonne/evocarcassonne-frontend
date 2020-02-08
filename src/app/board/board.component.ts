@@ -182,6 +182,15 @@ export class BoardComponent implements OnInit {
     this.tileToPlace.RotateAngle += angle;
   }
 
+  canRotate() {
+    if (this.currentTile != "backtile") {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
   checkCanPlaceFigure(t: Tile) {
     let last = this.tableInfo.tableInfo[this.tableInfo.tableInfo.length - 1];
     if (
