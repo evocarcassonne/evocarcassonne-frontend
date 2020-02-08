@@ -71,7 +71,9 @@ export class BoardComponent implements OnInit {
     this.mouseOver = false;
     const source = interval(2000);
     this.sub = source.subscribe(() => {
-      this.getCurrentState(result => {});
+      this.getCurrentState((result: TableInfo) => {
+        this.tableInfo = result;
+      });
     });
   }
 
@@ -180,6 +182,49 @@ export class BoardComponent implements OnInit {
   /** ------------------------------------------------------------------------- */
   rotate(angle: number) {
     this.tileToPlace.RotateAngle += angle;
+  }
+
+  isFigureNull(figure: any) {
+    if (figure == null || figure == "null") {
+      return false;
+    }
+    return true;
+  }
+
+  getShiftXForFigure(side: any) {
+    if (side == null) {
+      return 0;
+    }
+    switch (side.side) {
+      case 0:
+        return 0.3 * this.tileSize;
+      case 1:
+        return 0.6 * this.tileSize;
+      case 2:
+        return 0.3 * this.tileSize;
+      case 3:
+        return 0;
+      default:
+        return 0;
+    }
+  }
+
+  getShiftYForFigure(side: any) {
+    if (side == null) {
+      return 0;
+    }
+    switch (side.side) {
+      case 0:
+        return 0;
+      case 1:
+        return 0.3 * this.tileSize;
+      case 2:
+        return 0.6 * this.tileSize;
+      case 3:
+        return 0.3 * this.tileSize;
+      default:
+        return 0;
+    }
   }
 
   checkCanPlaceFigure(t: Tile) {

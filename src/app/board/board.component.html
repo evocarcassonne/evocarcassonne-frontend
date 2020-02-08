@@ -1,5 +1,9 @@
 <div class="container-fluid">
-  <app-stat-table class="stat-table" [players]="tableInfo.playerInfo" [currentPlayer]="tableInfo.currentPlayer"></app-stat-table>
+  <app-stat-table
+    class="stat-table"
+    [players]="tableInfo.playerInfo"
+    [currentPlayer]="tableInfo.currentPlayer"
+  ></app-stat-table>
   <!-- game board -->
   <div
     class="row"
@@ -123,7 +127,37 @@
         }"
       ></div>
     </div>
-
+    <div
+      id="gamePlayArea"
+      *ngFor="let figureOnTable of tableInfo.tableInfo"
+      [ngStyle]="{
+        position: 'absolute',
+        height: 'min-content',
+        width: 'min-content',
+        'left.px':
+          tileSize * figureOnTable.position.x +
+          shift.x +
+          getShiftYForFigure(figureOnTable.figure),
+        'top.px':
+          tileSize * figureOnTable.position.y +
+          shift.y +
+          getShiftYForFigure(figureOnTable.figure)
+      }"
+    >
+      <div
+        *ngIf="isFigureNull(figureOnTable.figure)"
+        [ngStyle]="{
+          position: absolute,
+          'width.px': tileSize * 0.4,
+          'height.px': tileSize * 0.4,
+          display: 'block',
+          background: 'url(../assets/meeple.png)',
+          'z-index': '100',
+          'background-size': 'cover',
+          'background-repeat': 'no-repeat'
+        }"
+      ></div>
+    </div>
     <!-- control panel -->
     <div
       class="row fixed-bottom"
@@ -161,7 +195,9 @@
         <button class="btn btn-warning" (click)="rotate(90)">
           Rotate right
         </button>
-        <button class="btn btn-secondary" (click)="endTurn()">End turn</button>
+        <button class="btn btn-secondary" (click)="endTurn()">
+          End turn
+        </button>
       </div>
     </div>
   </div>
