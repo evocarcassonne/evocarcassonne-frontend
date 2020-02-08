@@ -5,8 +5,6 @@ export class PlaceTile {
   RotateAngle: number;
   coordinateX: number;
   coordinateY: number;
-  placeFigure: boolean;
-  side: number;
 
   constructor(
     gameId: string,
@@ -14,9 +12,7 @@ export class PlaceTile {
     tileProps: string,
     rotateAngle: number,
     x: number,
-    y: number,
-    place: boolean,
-    side: number
+    y: number
   ) {
     this.gameId = gameId;
     this.playerId = playerId;
@@ -24,7 +20,5 @@ export class PlaceTile {
     this.RotateAngle = rotateAngle;
     this.coordinateX = x;
     this.coordinateY = y;
-    this.placeFigure = place;
-    this.side = side;
   }
 }

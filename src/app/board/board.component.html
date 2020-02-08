@@ -1,53 +1,9 @@
-<div class="container">
-  <div class="row" style="margin-top: 2rem;margin-bottom: 2rem;">
-    <div class="col-md-2 col-sm-1"></div>
-    <div class="col-md-8 col-sm-10 text-center">
-      <button
-        class="btn btn-secondary align-bottom"
-        (click)="getNewTile()"
-        style="margin-right: 1rem;"
-      >
-        Get new tile
-      </button>
-      <button class="btn btn-secondary align-bottom" (click)="endTurn()">
-        End turn
-      </button>
-    </div>
-    <br />
-    <div class="text-center row" style="margin-top: 2rem; width: 100%;">
-      <div class="align-bottom col-3">
-        <button class="btn btn-warning" (click)="rotate(-90)">
-          Rotate left
-        </button>
-      </div>
-      <div class="col-3">
-        <div
-          [ngStyle]="{
-            'width.px': 150,
-            'height.px': 150,
-            background:
-              'url(../assets/Tiles/' +
-              tile +
-              '.png) center center / cover no-repeat',
-            transform: 'rotate(' + tileToPlace.RotateAngle + 'deg)'
-          }"
-        ></div>
-      </div>
-      <div class="align-bottom col-3">
-        <button class="btn btn-warning align-bottom" (click)="rotate(90)">
-          Rotate right
-        </button>
-      </div>
-    </div>
-  </div>
+<div class="container-fluid">
+  <app-stat-table class="stat-table" [players]="tableInfo.playerInfo" [currentPlayer]="tableInfo.currentPlayer"></app-stat-table>
+  <!-- game board -->
   <div
-    class="text-center"
-    style="position: absolute;
-  height: 80%;
-  width: 44%;
-  cursor: move;
-  z-index: 0;
-  background-color: bisque;"
+    class="row"
+    style="height: 80.5vh; cursor: move; background-color: #fafafa;"
     mouseWheel
     (mousedown)="onMoveStart($event)"
     (mouseup)="onMoveEnd($event)"
@@ -58,66 +14,154 @@
     (mouseWheelDown)="mouseWheelDown($event)"
   >
     <div
-      style="
-  width: 80%;
-  height: auto;
-  overflow: hidden;
-  z-index: 1;
-  text-align: center;
-  top: 1rem;
-  margin-left: 1rem;
-  margin-right: 1rem;
-  z-index: 1;
-"
+      id="gamePlayArea"
+      *ngFor="let tileonTable of tableInfo.tableInfo"
+      [ngStyle]="{
+        position: 'absolute',
+        height: 'min-content',
+        width: 'min-content',
+        'left.px': tileSize * tileonTable.position.x + shift.x,
+        'top.px': tileSize * tileonTable.position.y + shift.y
+      }"
     >
       <div
-        id="gamePlayArea"
-        *ngFor="let tileonTable of tableInfo.tableInfo"
         [ngStyle]="{
-          position: 'absolute',
-          height: 'min-content',
-          width: 'min-content',
-          'left.px': tileSize * tileonTable.position.x + shift.x,
-          'top.px': tileSize * tileonTable.position.y + shift.y
+          position: absolute,
+          'width.px': tileSize,
+          'height.px': tileSize,
+          display: 'block',
+          background: 'url(../assets/Tiles/' + tileonTable.tile + '.png)',
+          'background-size': 'cover',
+          'background-repeat': 'no-repeat',
+          transform: 'rotate(' + tileonTable.rotation + 'deg)
+				'
         }"
       >
         <div
           [ngStyle]="{
-            position: absolute,
+            position: 'relative',
+            visibility: checkCanPlaceFigure(tileonTable),
             'width.px': tileSize,
             'height.px': tileSize,
             display: 'block',
-            background: 'url(../assets/Tiles/' + tileonTable.tile + '.png)',
-            'background-size': 'cover',
-            'background-repeat': 'no-repeat',
-            transform: 'rotate(' + tileonTable.rotation + 'deg)'
+            transform: 'rotate(' + tileonTable.rotation * -1 + 'deg)'
           }"
-        ></div>
+        >
+          <button
+            class="btn-sm btn-secondary"
+            [ngStyle]="{
+              'width.px': tileSize * 0.6,
+              'height.px': tileSize * 0.2,
+              'margin-top.px': '0',
+              position: 'absolute',
+              'left.px': tileSize * 0.2
+            }"
+            (click)="placeFigure(0)"
+            *ngIf="isButtonActive(0)"
+          ></button>
+          <button
+            class="btn-sm btn-primary"
+            [ngStyle]="{
+              'width.px': tileSize * 0.2,
+              position: 'absolute',
+              'height.px': tileSize * 0.6,
+              'vertical-align': 'center',
+              'left.px': 0,
+              'top.px': 0.2 * tileSize
+            }"
+            (click)="placeFigure(3)"
+            *ngIf="isButtonActive(3)"
+          ></button>
+          <button
+            class="btn-sm btn-info"
+            [ngStyle]="{
+              position: 'absolute',
+              'right.px': '0',
+              'top.px': 0.2 * tileSize,
+              'width.px': tileSize * 0.2,
+              'height.px': tileSize * 0.6
+            }"
+            (click)="placeFigure(1)"
+            *ngIf="isButtonActive(1)"
+          ></button>
+          <button
+            class="btn-sm btn-warning"
+            [ngStyle]="{
+              'width.px': tileSize * 0.6,
+              'height.px': tileSize * 0.2,
+              'left.px': tileSize * 0.2,
+              position: 'absolute',
+              'top.px': 0.8 * tileSize
+            }"
+            (click)="placeFigure(2)"
+            *ngIf="isButtonActive(2)"
+          ></button>
+        </div>
       </div>
-
+    </div>
+    <div
+      id="placeTileArea"
+      [ngStyle]="{
+        position: 'absolute',
+        height: 'min-content',
+        width: 'min-content',
+        'left.px': tileSize * pos.x + shift.x,
+        'top.px': tileSize * pos.y + shift.y
+      }"
+      *ngFor="let pos of placePositions"
+    >
       <div
-        id="placeTileArea"
+        (click)="placeTile(pos.x, pos.y)"
         [ngStyle]="{
-          position: 'absolute',
-          height: 'min-content',
-          width: 'min-content',
-          'left.px': tileSize * pos.x + shift.x,
-          'top.px': tileSize * pos.y + shift.y
+          position: absolute,
+          'width.px': tileSize,
+          'height.px': tileSize,
+          display: 'block',
+          background: 'url(../assets/place.jpg)',
+          'background-size': 'cover',
+          cursor: 'pointer'
         }"
-        *ngFor="let pos of placePositions"
-      >
-        <div
-          (click)="placeTile(pos.x, pos.y)"
-          [ngStyle]="{
-            position: absolute,
-            'width.px': tileSize,
-            'height.px': tileSize,
-            display: 'block',
-            background: 'url(../assets/place.jpg)',
-            'background-size': 'cover',
-            cursor: 'pointer'
-          }"
-        ></div>
+      ></div>
+    </div>
+
+    <!-- control panel -->
+    <div
+      class="row fixed-bottom"
+      style="align-items: center; height: 12.5vh; background-color: #ededed"
+    >
+      <div class="col text-right">
+        <button
+          class="btn btn-secondary"
+          (click)="getNewTile()"
+          [disabled]="!canGetNewTile ? true : null"
+        >
+          Get new tile
+        </button>
+        <button class="btn btn-warning" (click)="rotate(-90)">
+          Rotate left
+        </button>
+      </div>
+      <div
+        class="col-1"
+        [ngStyle]="{
+          'width.px': 75,
+          'height.px': 75,
+          'max-width.px': 75,
+          'max-height.px': 75,
+          'min-width.px': 75,
+          'min-height.px': 75,
+          background:
+            'url(../assets/Tiles/' +
+            currentTile +
+            '.png) center center / cover no-repeat',
+          transform: 'rotate(' + tileToPlace.RotateAngle + 'deg)'
+        }"
+      ></div>
+      <div class="col text-left">
+        <button class="btn btn-warning" (click)="rotate(90)">
+          Rotate right
+        </button>
+        <button class="btn btn-secondary" (click)="endTurn()">End turn</button>
       </div>
     </div>
   </div>

@@ -2,6 +2,7 @@ import { HttpHeaders, HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { callbackify } from "util";
 import { PlaceTile } from "./models/placeTile";
+import { PlaceFigure } from "./models/placeFigure";
 
 const BASE_URL = "http://localhost:8080/api/GamePlay";
 
@@ -24,13 +25,14 @@ export class GamePlayService {
       .subscribe(response => callback(response.toString()));
   }
 
-  getNewTile(gameId: string, callback) {
+  getNewTile(gameId: string, playerId: string, callback) {
     this.http
       .get(BASE_URL + "/GetNewTile", {
         responseType: "text",
         headers: new HttpHeaders({
           ["Content-Type"]: "application/json",
           ["gameId"]: gameId,
+          ["playerId"]: playerId,
           ["Access-Control-Allow-Origin"]: "http://localhost:4200"
         })
       })
@@ -92,6 +94,32 @@ export class GamePlayService {
         callback(response);
       });
   }
+
+  placeFigure(figureToPlace: PlaceFigure, callback) {
+    this.http
+      .post(BASE_URL + "/PlaceFigure", figureToPlace, {
+        headers: new HttpHeaders({
+          ["Content-Type"]: "application/json",
+          ["Access-Control-Allow-Origin"]: "http://localhost:4200"
+        })
+      })
+      .subscribe(response => {
+        callback(response);
+      });
+  }
+  canPlaceFigure(figureToPlace: PlaceFigure, callback) {
+    this.http
+      .post(BASE_URL + "/CanPlaceFigure", figureToPlace, {
+        headers: new HttpHeaders({
+          ["Content-Type"]: "application/json",
+          ["Access-Control-Allow-Origin"]: "http://localhost:4200"
+        })
+      })
+      .subscribe(response => {
+        callback(response);
+      });
+  }
+
   getCurrentState(gameId: string, callback) {
     this.http
       .get(BASE_URL + "/State", {

@@ -49,7 +49,12 @@
               </p>
               <div class="text-center">
                 <p class="card-text">{{ gameId }}</p>
-                <a href="#" class="card-link btn btn-success ">Copy code</a>
+                <a
+                  class="card-link btn btn-success"
+                  (click)="copyText()"
+                  value="click to copy"
+                  >Copy code</a
+                >
               </div>
             </div>
           </div>

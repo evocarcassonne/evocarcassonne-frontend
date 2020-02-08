@@ -1,9 +1,13 @@
 import { Component, Injectable, Input, OnInit } from "@angular/core";
 import { PlayerInfo } from "../api/models/playerinfo";
 import { PlayerService } from "../api/player.service";
-import { Observable, Subscription, interval } from "rxjs";
+import { Subscription, interval } from "rxjs";
 import { GamePlayService } from "../api/gameplay.service";
 import { CookieService } from "ngx-cookie-service";
+import { Router } from "@angular/router";
+import { TableInfo } from "../api/models/tableInfo";
+import { ColorGithubModule } from "ngx-color/github";
+import { ColorEvent } from "ngx-color";
 
 @Component({
   selector: "waiting-room",
@@ -14,6 +18,7 @@ export class WaitingRoomComponent implements OnInit {
   @Input() players: Array<PlayerInfo>;
   @Input() gameId: string;
   sub: Subscription;
+  showColorPicker: boolean = false;
 
   ngOnInit(): void {
     const source = interval(2000);
@@ -25,7 +30,8 @@ export class WaitingRoomComponent implements OnInit {
   constructor(
     private playerService: PlayerService,
     private gamePlayService: GamePlayService,
-    private cookie: CookieService
+    private cookie: CookieService,
+    private router: Router
   ) {}
 
   checkConnectedPlayers() {
@@ -36,20 +42,28 @@ export class WaitingRoomComponent implements OnInit {
     ) {
       this.playerService.playersInGame(this.gameId, result => {
         this.players = result;
-        this.gamePlayService.getCurrentState(this.gameId, result => {
-          if (result.gameState === 0) {
-            this.sub.unsubscribe();
+        this.gamePlayService.getCurrentState(
+          this.gameId,
+          (result: TableInfo) => {
+            if (result.gameState === "Started") {
+              this.router.navigate(["/playing"]);
+              this.sub.unsubscribe();
+            }
           }
-        });
+        );
       });
     }
   }
 
   canModifyColor(playerId: string) {
     if (this.cookie.get("playerId") === playerId) {
-      return "visible";
+      return "inline-block";
     } else {
-      return "hidden";
+      return "none";
     }
+  }
+
+  handleChange($event: ColorEvent, player: PlayerInfo) {
+    //player.color = $event.color.hex;
   }
 }

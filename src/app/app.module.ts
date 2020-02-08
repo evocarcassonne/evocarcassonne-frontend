@@ -13,8 +13,9 @@ import { BoardComponent } from "./board/board.component";
 import { WaitingRoomComponent } from "./waiting-room/waitingroom";
 import { CreateComponent } from "./create-game/create.component";
 import { SubscribeComponent } from "./subscribe-game/subscribe.component";
-import { InfoPanelComponent } from "../infopanel/infopanel.component";
 import { Navbar } from "./navbar/navbar";
+import { ColorGithubModule } from 'ngx-color/github';
+import { StatTableComponent } from './stat-table/stat-table.component';
 
 @NgModule({
   declarations: [
@@ -24,15 +25,16 @@ import { Navbar } from "./navbar/navbar";
     BoardComponent,
     CreateComponent,
     SubscribeComponent,
-    InfoPanelComponent,
     Navbar,
-    WaitingRoomComponent
+    WaitingRoomComponent,
+    StatTableComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     AngularDraggableModule,
-    AppRoutingModule
+    AppRoutingModule,
+	ColorGithubModule
   ],
   bootstrap: [AppComponent],
   providers: [CookieService]

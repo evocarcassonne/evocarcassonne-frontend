@@ -3,6 +3,7 @@ import { GameService } from "../api/game.service";
 import { GamePlayService } from "../api/gameplay.service";
 import { CookieService } from "ngx-cookie-service";
 import { PlayerInfo } from "../api/models/playerinfo";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "create-game",
@@ -27,8 +28,10 @@ export class CreateComponent implements OnInit {
   constructor(
     private gameService: GameService,
     private gamePlayService: GamePlayService,
-    private cookie: CookieService
+    private cookie: CookieService,
+    private router: Router
   ) {}
+
   createGame(): void {
     this.showSpinner = "visible";
     if (this.playerName !== null && this.playerName !== "") {
@@ -53,7 +56,19 @@ export class CreateComponent implements OnInit {
     this.gamePlayService.startGame(
       this.cookie.get("gameId"),
       this.cookie.get("playerId"),
-      result => {}
+      result => {
+        this.router.navigate(["/playing"]);
+      }
     );
+  }
+
+  copyText() {
+    let selBox = document.createElement("textarea");
+    selBox.value = this.gameId;
+    document.body.appendChild(selBox);
+    selBox.focus();
+    selBox.select();
+    document.execCommand("copy");
+    document.body.removeChild(selBox);
   }
 }

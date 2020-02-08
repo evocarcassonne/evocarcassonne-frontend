@@ -1,25 +1,38 @@
 import { Component, Injectable, OnInit, Input } from "@angular/core";
 import { GamePlayService } from "../api/gameplay.service";
 import { PlaceTile } from "../api/models/placeTile";
+import { PlaceFigure } from "../api/models/placeFigure";
 import { TableInfo } from "../api/models/tableInfo";
 import { Tile } from "../api/models/tile";
 import { PlayerInfo } from "../api/models/playerinfo";
 import { Position } from "../api/models/position";
+import { CookieService } from "ngx-cookie-service";
+import { Subscription, interval } from "rxjs";
 
 @Component({
   selector: "board",
-  templateUrl: "./board.component.html"
+  templateUrl: "./board.component.html",
+  styleUrls: ["./board.component.css"]
 })
+@Injectable()
 export class BoardComponent implements OnInit {
-  constructor(private gamePlayService: GamePlayService) {}
+  constructor(
+    private gamePlayService: GamePlayService,
+    private cookie: CookieService
+  ) {}
 
   gameId: string;
   tileSize: number;
-  tile: string;
+  currentTile: string;
   placePositions: Array<Position>;
   tableInfo: TableInfo;
   tileToPlace: PlaceTile;
   shift: Position;
+  sub: Subscription;
+  canGetNewTile: boolean = false;
+  isTileDown: boolean = false;
+  placedTile: boolean = false;
+  placedFigure = -1;
 
   /** Mouse connected attributes */
   initialPos: {
@@ -28,6 +41,7 @@ export class BoardComponent implements OnInit {
     active: boolean;
   };
   mouseOver: boolean;
+
   /** ------------------------- */
   ngOnInit(): void {
     this.initialPos = {
@@ -36,78 +50,95 @@ export class BoardComponent implements OnInit {
       active: false
     };
     this.tileSize = 50;
-    this.gameId = "ez a game id";
-    const players = [];
-    players.push({
-      playerId: "",
-      numberOfFigures: 0,
-      name: "Krisz",
-      points: 7
-    });
-    this.tile = "S321014";
-    const tableInfo = {
-      tile: "S321014",
-      position: { x: 5, y: 5 },
-      rotation: 0,
-      figure: null
-    };
+    this.gameId = this.cookie.get("gameId");
+    this.currentTile = "backtile";
+
     const tableList = [];
-    tableList.push(tableInfo);
-    const table = new TableInfo(
-      players,
-      1,
-      new PlayerInfo("", 7, "a", 0),
-      tableList,
-      "WaitingForPlayers"
-    );
-    this.tableInfo = table;
-    this.tileToPlace = new PlaceTile("", "", "", 0, 0, 0, false, 0);
+
+    this.tableInfo = new TableInfo(null, 1, null, tableList, "Started");
+    this.getCurrentState(result => {
+      this.tableInfo = result;
+      if (
+        this.cookie.get("playerId") == this.tableInfo.currentPlayer.playerId
+      ) {
+        this.canGetNewTile = true;
+      }
+    });
+
+    this.tileToPlace = new PlaceTile("", "", "", 0, 0, 0);
     this.placePositions = this.getPlacePositions();
     this.shift = new Position(0, 0);
     this.mouseOver = false;
+    const source = interval(2000);
+    this.sub = source.subscribe(() => {
+      this.getCurrentState(result => {});
+    });
   }
 
   /** Methods to handle requests to server */
   getNewTile() {
-    this.gamePlayService.getNewTile(this.gameId, result => {
-      this.tile = result;
-      this.tileToPlace.tileProps = result;
+    this.getCurrentState(result => {
+      this.gamePlayService.getNewTile(
+        this.gameId,
+        this.cookie.get("playerId"),
+        tile => {
+          this.currentTile = tile;
+          this.tileToPlace.tileProps = tile;
+        }
+      );
+      this.canGetNewTile = false;
+      this.isTileDown = true;
+      this.placedTile = false;
     });
   }
 
   /** Places a tile to the given position. Figure placing also required. */
   placeTile(x: number, y: number) {
     this.tileToPlace.gameId = this.gameId;
-    this.tileToPlace.playerId = this.tableInfo.currentPlayer.playerId;
-    this.tileToPlace.tileProps = this.tile;
-    this.tileToPlace.placeFigure = false;
-    this.tileToPlace.side = 0;
+    this.tileToPlace.playerId = this.cookie.get("playerId");
+    this.tileToPlace.tileProps = this.currentTile;
     this.tileToPlace.coordinateX = x;
     this.tileToPlace.coordinateY = y;
     this.gamePlayService.placeTile(this.tileToPlace, response => {
       if (response) {
-        this.tableInfo.tableInfo.push(
-          new Tile(
-            this.tileToPlace.tileProps,
-            {
-              x: this.tileToPlace.coordinateX,
-              y: this.tileToPlace.coordinateY
-            },
-            this.tileToPlace.RotateAngle,
-            {
-              player: this.tileToPlace.playerId,
-              side: this.tileToPlace.side
-            }
-          )
+        let justPlacedTile = new Tile(
+          this.tileToPlace.tileProps,
+          {
+            x: this.tileToPlace.coordinateX,
+            y: this.tileToPlace.coordinateY
+          },
+          this.tileToPlace.RotateAngle,
+          null
         );
+        this.tableInfo.tableInfo.push(justPlacedTile);
+        this.isTileDown = true;
+        this.placedTile = true;
+        this.checkCanPlaceFigure(justPlacedTile);
         this.placePositions = new Array<Position>();
         this.placePositions = this.getPlacePositions();
         this.tileToPlace.RotateAngle = 0;
         this.tileToPlace.coordinateX = 0;
         this.tileToPlace.coordinateY = 0;
-        this.tileToPlace.placeFigure = false;
-        this.tileToPlace.side = 0;
-        this.tile = "backtile";
+        this.currentTile = "backtile";
+      }
+    });
+  }
+
+  placeFigure(side: number) {
+    const figureToPlace = new PlaceFigure(
+      this.gameId,
+      this.cookie.get("playerId"),
+      side
+    );
+    this.gamePlayService.placeFigure(figureToPlace, response => {
+      if (response) {
+        this.tableInfo.tableInfo[this.tableInfo.tableInfo.length - 1].figure = {
+          player: this.cookie.get("playerId"),
+          side: this.placedFigure
+        };
+        this.placedFigure = side;
+      } else {
+        this.placedFigure = -1;
       }
     });
   }
@@ -115,17 +146,62 @@ export class BoardComponent implements OnInit {
   endTurn() {
     this.gamePlayService.endTurn(
       this.gameId,
-      this.tableInfo.currentPlayer.playerId,
+      this.cookie.get("playerId"),
       (result: TableInfo) => {
         this.tableInfo = result;
+        this.isTileDown = false;
         this.placePositions = new Array<Position>();
         this.placePositions = this.getPlacePositions();
+        this.placedFigure = -1;
       }
     );
   }
+
+  getCurrentState(callback) {
+    this.gamePlayService.getCurrentState(this.gameId, (result: TableInfo) => {
+      this.tableInfo.currentPlayer = result.currentPlayer;
+      this.tableInfo.currentRound = result.currentRound;
+      this.tableInfo.tableInfo = result.tableInfo;
+      this.tableInfo.playerInfo = result.playerInfo;
+      this.placePositions = this.getPlacePositions();
+
+      if (
+        this.cookie.get("playerId") == this.tableInfo.currentPlayer.playerId
+      ) {
+        if (this.isTileDown == false) {
+          this.canGetNewTile = true;
+        }
+      }
+
+      callback(result);
+    });
+  }
+
   /** ------------------------------------------------------------------------- */
   rotate(angle: number) {
     this.tileToPlace.RotateAngle += angle;
+  }
+
+  checkCanPlaceFigure(t: Tile) {
+    let last = this.tableInfo.tableInfo[this.tableInfo.tableInfo.length - 1];
+    if (
+      this.placedTile &&
+      t.position.x === last.position.x &&
+      t.position.y === last.position.y &&
+      this.canGetNewTile == false
+    ) {
+      return "visible";
+    } else {
+      return "hidden";
+    }
+  }
+
+  isButtonActive(n: number) {
+    if (this.placedFigure === -1) {
+      return true;
+    } else {
+      return this.placedFigure === n;
+    }
   }
 
   /** Searches the places where tiles can be placed */

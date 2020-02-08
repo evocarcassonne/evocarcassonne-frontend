@@ -13,6 +13,7 @@ export class TableInfo {
       numberOfFigures: number;
       name: string;
       points: number;
+      color: string;
     }>,
     currentRound: number,
     currentPlayer: {
@@ -20,6 +21,7 @@ export class TableInfo {
       numberOfFigures: number;
       name: string;
       points: number;
+      color: string;
     },
     tableInfo: Array<Tile>,
     gameState: string
