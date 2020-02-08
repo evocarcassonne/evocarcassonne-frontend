@@ -4,7 +4,6 @@ import { PlaceTile } from "../api/models/placeTile";
 import { PlaceFigure } from "../api/models/placeFigure";
 import { TableInfo } from "../api/models/tableInfo";
 import { Tile } from "../api/models/tile";
-import { PlayerInfo } from "../api/models/playerinfo";
 import { Position } from "../api/models/position";
 import { CookieService } from "ngx-cookie-service";
 import { Subscription, interval } from "rxjs";
@@ -29,9 +28,7 @@ export class BoardComponent implements OnInit {
   tileToPlace: PlaceTile;
   shift: Position;
   sub: Subscription;
-  canGetNewTile: boolean = false;
-  isTileDown: boolean = false;
-  placedTile: boolean = false;
+  private _isTilePlaced: boolean = false;
   placedFigure = -1;
 
   /** Mouse connected attributes */
@@ -58,11 +55,6 @@ export class BoardComponent implements OnInit {
     this.tableInfo = new TableInfo(null, 1, null, tableList, "Started");
     this.getCurrentState(result => {
       this.tableInfo = result;
-      if (
-        this.cookie.get("playerId") == this.tableInfo.currentPlayer.playerId
-      ) {
-        this.canGetNewTile = true;
-      }
     });
 
     this.tileToPlace = new PlaceTile("", "", "", 0, 0, 0);
@@ -86,9 +78,7 @@ export class BoardComponent implements OnInit {
           this.tileToPlace.tileProps = tile;
         }
       );
-      this.canGetNewTile = false;
-      this.isTileDown = true;
-      this.placedTile = false;
+      this._isTilePlaced = false;
     });
   }
 
@@ -111,8 +101,6 @@ export class BoardComponent implements OnInit {
           null
         );
         this.tableInfo.tableInfo.push(justPlacedTile);
-        this.isTileDown = true;
-        this.placedTile = true;
         this.checkCanPlaceFigure(justPlacedTile);
         this.placePositions = new Array<Position>();
         this.placePositions = this.getPlacePositions();
@@ -120,6 +108,8 @@ export class BoardComponent implements OnInit {
         this.tileToPlace.coordinateX = 0;
         this.tileToPlace.coordinateY = 0;
         this.currentTile = "backtile";
+
+        this._isTilePlaced = true;
       }
     });
   }
@@ -149,10 +139,10 @@ export class BoardComponent implements OnInit {
       this.cookie.get("playerId"),
       (result: TableInfo) => {
         this.tableInfo = result;
-        this.isTileDown = false;
         this.placePositions = new Array<Position>();
         this.placePositions = this.getPlacePositions();
         this.placedFigure = -1;
+        this._isTilePlaced = false;
       }
     );
   }
@@ -164,15 +154,6 @@ export class BoardComponent implements OnInit {
       this.tableInfo.tableInfo = result.tableInfo;
       this.tableInfo.playerInfo = result.playerInfo;
       this.placePositions = this.getPlacePositions();
-
-      if (
-        this.cookie.get("playerId") == this.tableInfo.currentPlayer.playerId
-      ) {
-        if (this.isTileDown == false) {
-          this.canGetNewTile = true;
-        }
-      }
-
       callback(result);
     });
   }
@@ -182,27 +163,56 @@ export class BoardComponent implements OnInit {
     this.tileToPlace.RotateAngle += angle;
   }
 
-  canRotate() {
-    if (this.currentTile != "backtile") {
-      return true;
-    }
-    else {
-      return false;
-    }
-  }
-
   checkCanPlaceFigure(t: Tile) {
     let last = this.tableInfo.tableInfo[this.tableInfo.tableInfo.length - 1];
     if (
-      this.placedTile &&
+      this.isTilePlaced() &&
       t.position.x === last.position.x &&
       t.position.y === last.position.y &&
-      this.canGetNewTile == false
+      this.canGetNewTile() == false
     ) {
       return "visible";
     } else {
       return "hidden";
     }
+  }
+
+  canGetNewTile(): boolean {
+    try {
+      if (this.cookie.get("playerId") != this.tableInfo.currentPlayer.playerId) {
+        return false;
+      }
+    } catch (error) {
+      /*
+      this exception handling is needed
+      because the tableInfo.currentPlayer.playerId is null
+      if this method is called before the first getCurrentState call
+      */
+      return false;
+    }
+
+    return !this.hasTile() && !this.isTilePlaced();
+  }
+
+  hasTile(): boolean {
+    if (this.currentTile == "backtile") {
+      return false;
+    }
+    else {
+      return true;
+    }
+  }
+
+  isTilePlaced(): boolean {
+    if (this.hasTile()) {
+      return false;
+    }
+
+    return this._isTilePlaced;
+  }
+
+  canEndTurn(): boolean {
+    return !this.hasTile() && this.isTilePlaced();
   }
 
   isButtonActive(n: number) {
