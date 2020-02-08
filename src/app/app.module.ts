@@ -15,6 +15,7 @@ import { CreateComponent } from "./create-game/create.component";
 import { SubscribeComponent } from "./subscribe-game/subscribe.component";
 import { Navbar } from "./navbar/navbar";
 import { StatTableComponent } from './stat-table/stat-table.component';
+import { ColorCircleModule } from 'ngx-color/circle';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { StatTableComponent } from './stat-table/stat-table.component';
     HttpClientModule,
     AngularDraggableModule,
     AppRoutingModule,
+    ColorCircleModule
   ],
   bootstrap: [AppComponent],
   providers: [CookieService]

@@ -7,8 +7,8 @@
             <h3>{{player.name}}</h3>
           </div>
           <div class="col-6 text-right">
-            <button class="btn"
-              [ngStyle]="{'display': canModifyColor(player.playerId), 'background-color': player.color}">
+            <button type="button" class="btn"
+              [ngStyle]="{'display': canModifyColor(player.playerId), 'background-color': player.color}" data-toggle="modal" data-target="#colorPickerModal">
               Pick color
             </button>
           </div>
@@ -16,5 +16,23 @@
       </div>
     </div>
     <br />
+  </div>
+  <div class="modal fade" id="colorPickerModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Pick a color</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <color-circle (onChangeComplete)="changeComplete($event)" [colors]="this.colors"></color-circle>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

@@ -6,6 +6,7 @@ import { GamePlayService } from "../api/gameplay.service";
 import { CookieService } from "ngx-cookie-service";
 import { Router } from "@angular/router";
 import { TableInfo } from "../api/models/tableInfo";
+import { ColorEvent } from 'ngx-color';
 
 @Component({
   selector: "waiting-room",
@@ -16,10 +17,13 @@ export class WaitingRoomComponent implements OnInit {
   @Input() players: Array<PlayerInfo>;
   @Input() gameId: string;
   sub: Subscription;
+  colors: Array<string> = ["#FF0000", "#800000", "#FFFF00", "#808000", "#00FF00", "#008000", "#00FFFF", "#008080", "#0000FF", "#000080", "#FF00FF", "#800080"];
+  // ["#e6194B", "#3cb44b", "#ffe119", "#4363d8", "#f58231", "#911eb4", "#42d4f4", "#f032e6", "#bfef45", "#fabebe", "#469990", "#e6beff", "#9A6324", "#fffac8", "#800000", "#aaffc3", "#808000", "#ffd8b1", "#000075"];
 
   ngOnInit(): void {
     const source = interval(2000);
     this.sub = source.subscribe(() => {
+      // TODO: upload player color to the server
       this.checkConnectedPlayers();
     });
   }
@@ -58,5 +62,10 @@ export class WaitingRoomComponent implements OnInit {
     } else {
       return "none";
     }
+  }
+
+  changeComplete($event: ColorEvent) {
+    console.log(this.players.find(e => e.playerId === this.cookie.get("playerId")));
+    this.players.find(e => e.playerId === this.cookie.get("playerId")).color = $event.color.hex;
   }
 }
