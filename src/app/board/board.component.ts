@@ -204,6 +204,8 @@ export class BoardComponent implements OnInit {
         return 30;
       case 3:
         return 0;
+      case 4:
+        return 30;
       default:
         return 0;
     }
@@ -221,6 +223,8 @@ export class BoardComponent implements OnInit {
       case 2:
         return 60;
       case 3:
+        return 30;
+      case 4:
         return 30;
       default:
         return 0;
@@ -346,6 +350,19 @@ export class BoardComponent implements OnInit {
       neighbor = null;
     }
     return neighbors;
+  }
+
+  isChurchVisible(tileName: string): string {
+    var specialities = tileName.substring(6);
+
+    for (let i = 0; i < specialities.length; i++) {
+      const character = specialities.charAt(i);
+      if (character == "2") {
+        return "inherit";
+      }
+    }
+
+    return "hidden";
   }
 
   /* Replace callback?? */

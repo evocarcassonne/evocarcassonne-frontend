@@ -122,6 +122,20 @@
             (click)="placeFigure(2)"
             *ngIf="isButtonActive(2)"
           ></button>
+          <button
+            class="btn-sm btn-secondary"
+            [ngStyle]="{
+              'width.px': tileSize * 0.6,
+              'height.px': tileSize * 0.6,
+              'margin-top.px': '0',
+              position: 'absolute',
+              'left.px': tileSize * 0.2,
+              'top.px': 0.2 * tileSize,
+              'visibility': isChurchVisible(tileonTable.tile)
+            }"
+            (click)="placeFigure(4)"
+            *ngIf="isButtonActive(4)"
+          ></button>
         </div>
       </div>
     </div>
