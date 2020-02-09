@@ -28,6 +28,28 @@
         'top.px': tileSize * tileonTable.position.y + shift.y
       }"
     >
+    <div [ngStyle]="{
+        position: 'absolute',
+        height: 'min-content',
+        width: 'min-content',
+        'left.%': getShiftXForFigure(tileonTable.figure),
+        'top.%': getShiftYForFigure(tileonTable.figure),
+        'z-index': '1'
+      }"
+    >
+      <div
+        *ngIf="isFigureNull(tileonTable.figure)"
+        [ngStyle]="{
+          position: absolute,
+          'width.px': tileSize * 0.4,
+          'height.px': tileSize * 0.4,
+          display: 'block',
+          background: 'url(../assets/meeple.png)',
+          'background-size': 'cover',
+          'background-repeat': 'no-repeat'
+        }"
+      ></div>
+    </div>
       <div
         [ngStyle]="{
           position: absolute,
@@ -124,37 +146,6 @@
           background: 'url(../assets/place.jpg)',
           'background-size': 'cover',
           cursor: 'pointer'
-        }"
-      ></div>
-    </div>
-    <div
-      id="gamePlayArea"
-      *ngFor="let figureOnTable of tableInfo.tableInfo"
-      [ngStyle]="{
-        position: 'absolute',
-        height: 'min-content',
-        width: 'min-content',
-        'left.px':
-          tileSize * figureOnTable.position.x +
-          shift.x +
-          getShiftYForFigure(figureOnTable.figure),
-        'top.px':
-          tileSize * figureOnTable.position.y +
-          shift.y +
-          getShiftYForFigure(figureOnTable.figure)
-      }"
-    >
-      <div
-        *ngIf="isFigureNull(figureOnTable.figure)"
-        [ngStyle]="{
-          position: absolute,
-          'width.px': tileSize * 0.4,
-          'height.px': tileSize * 0.4,
-          display: 'block',
-          background: 'url(../assets/meeple.png)',
-          'z-index': '100',
-          'background-size': 'cover',
-          'background-repeat': 'no-repeat'
         }"
       ></div>
     </div>

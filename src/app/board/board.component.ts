@@ -191,17 +191,17 @@ export class BoardComponent implements OnInit {
     return true;
   }
 
-  getShiftXForFigure(side: any) {
-    if (side == null) {
+  getShiftXForFigure(figure: { player: string, side: number }): number {
+    if (figure == null) {
       return 0;
     }
-    switch (side.side) {
+    switch (figure.side) {
       case 0:
-        return 0.3 * this.tileSize;
+        return 30;
       case 1:
-        return 0.6 * this.tileSize;
+        return 60;
       case 2:
-        return 0.3 * this.tileSize;
+        return 30;
       case 3:
         return 0;
       default:
@@ -209,19 +209,19 @@ export class BoardComponent implements OnInit {
     }
   }
 
-  getShiftYForFigure(side: any) {
-    if (side == null) {
+  getShiftYForFigure(figure: { player: string, side: number }): number {
+    if (figure == null) {
       return 0;
     }
-    switch (side.side) {
+    switch (figure.side) {
       case 0:
         return 0;
       case 1:
-        return 0.3 * this.tileSize;
+        return 30;
       case 2:
-        return 0.6 * this.tileSize;
+        return 60;
       case 3:
-        return 0.3 * this.tileSize;
+        return 30;
       default:
         return 0;
     }
