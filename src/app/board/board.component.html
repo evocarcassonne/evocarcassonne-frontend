@@ -1,5 +1,5 @@
 <div class="container-fluid">
-  <app-stat-table
+  <app-stat-table [style.z-index]="2"
     class="stat-table"
     [players]="tableInfo.playerInfo"
     [currentPlayer]="tableInfo.currentPlayer"
@@ -34,7 +34,8 @@
         width: 'min-content',
         'left.%': getShiftXForFigure(tileonTable.figure),
         'top.%': getShiftYForFigure(tileonTable.figure),
-        'z-index': '1'
+        'z-index': '1',
+        overflow: 'hidden'
       }"
     >
       <div
