@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { PlayerInfo } from '../api/models/playerinfo';
+import { TableInfo } from '../api/models/tableInfo';
 
 @Component({
   selector: 'app-stat-table',
@@ -7,8 +7,7 @@ import { PlayerInfo } from '../api/models/playerinfo';
   styleUrls: ['./stat-table.component.css']
 })
 export class StatTableComponent implements OnInit {
-  @Input() public players: Array<PlayerInfo>;
-  @Input() currentPlayer: PlayerInfo;
+  @Input() public tableInfo: TableInfo;
 
   constructor() { }
 

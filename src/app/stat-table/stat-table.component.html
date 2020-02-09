@@ -1,20 +1,28 @@
-<table class="table table-sm" style="background-color: #fafafaf2;">
-    <thead>
-      <tr>
-        <th scope="col"></th>
-        <th scope="col">Name</th>
-        <th scope="col">Points</th>
-        <th scope="col">Figures</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let player of players" [ngClass]="{'table-active' : player.playerId == currentPlayer.playerId}">
-        <th scope="row">
-          <svg-icon src="assets/meeple.svg" [svgStyle]="{ 'fill': player.color, 'height': '24px' }"></svg-icon>
-        </th>
-        <td>{{player.name}}</td>
-        <td>{{player.points}}</td>
-        <td>{{player.numberOfFigures}}</td>
-      </tr>
-    </tbody>
-  </table>
+<div style="background-color: #f3f3f3f2; z-index: 3;">
+  <div class="row justify-content-center align-items-center" style="height: 35.2px;">
+    Round {{tableInfo.currentRound}}
+  </div>
+  <div class="row" style="margin:0">
+    <table class="table table-sm" style="margin:0">
+      <thead>
+        <tr>
+          <th scope="col"></th>
+          <th scope="col">Name</th>
+          <th scope="col">Points</th>
+          <th scope="col">Figures</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let player of tableInfo.playerInfo"
+          [ngClass]="{'table-active' : player.playerId == tableInfo.currentPlayer.playerId}">
+          <th scope="row">
+            <svg-icon src="assets/meeple.svg" [svgStyle]="{ 'fill': player.color, 'height': '24px' }"></svg-icon>
+          </th>
+          <td>{{player.name}}</td>
+          <td>{{player.points}}</td>
+          <td>{{player.numberOfFigures}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
