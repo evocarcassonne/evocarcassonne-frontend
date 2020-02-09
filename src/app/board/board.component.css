@@ -9,3 +9,7 @@ button.btn {
 	margin-left: -10px;
 	z-index: 1;
 }
+
+.figure-button {
+	opacity: 50%;
+}
