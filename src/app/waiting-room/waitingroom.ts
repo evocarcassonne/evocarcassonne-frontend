@@ -23,7 +23,6 @@ export class WaitingRoomComponent implements OnInit {
   ngOnInit(): void {
     const source = interval(2000);
     this.sub = source.subscribe(() => {
-      // TODO: upload player color to the server
       this.checkConnectedPlayers();
     });
   }
@@ -65,7 +64,9 @@ export class WaitingRoomComponent implements OnInit {
   }
 
   changeComplete($event: ColorEvent) {
-    console.log(this.players.find(e => e.playerId === this.cookie.get("playerId")));
-    this.players.find(e => e.playerId === this.cookie.get("playerId")).color = $event.color.hex;
+    this.players.find(e => e.playerId === this.cookie.get("playerId")).color = $event.color.hex
+    this.playerService.setColor(this.gameId, this.cookie.get("playerId"), $event.color.hex, (result: string) => {
+      this.players.find(e => e.playerId === this.cookie.get("playerId")).color = result;
+    });
   }
 }

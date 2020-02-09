@@ -23,6 +23,7 @@
     "@angular/platform-browser": "~8.2.14",
     "@angular/platform-browser-dynamic": "~8.2.14",
     "@angular/router": "~8.2.14",
+    "angular-svg-icon": "^8.0.0",
     "angular2-draggable": "^2.3.2",
     "bootstrap": "^4.4.1",
     "dragscroll": "0.0.8",

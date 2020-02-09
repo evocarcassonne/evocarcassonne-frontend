@@ -52,4 +52,20 @@ export class PlayerService {
         callback(response);
       });
   }
+
+  setColor(gameId: string, playerId: string, color: string, callback) {
+    this.http
+    .get(BASE_URL + "/SetColor", {
+      headers: new HttpHeaders({
+        ["Content-Type"]: "application/json",
+        ["gameId"]: gameId,
+        ["playerId"]: playerId,
+        ["color"]: color,
+        ["Access-Control-Allow-Origin"]: "http://localhost:4200"
+      })
+    })
+    .subscribe(response => {
+      callback(response.toString());
+    });
+  }
 }
