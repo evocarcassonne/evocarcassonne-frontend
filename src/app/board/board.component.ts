@@ -71,7 +71,9 @@ export class BoardComponent implements OnInit {
     this.mouseOver = false;
     const source = interval(2000);
     this.sub = source.subscribe(() => {
-      this.getCurrentState(result => {});
+      this.getCurrentState((result: TableInfo) => {
+        this.tableInfo = result;
+      });
     });
   }
 
@@ -180,6 +182,53 @@ export class BoardComponent implements OnInit {
   /** ------------------------------------------------------------------------- */
   rotate(angle: number) {
     this.tileToPlace.RotateAngle += angle;
+  }
+
+  isFigureNull(figure: any) {
+    if (figure == null || figure == "null") {
+      return false;
+    }
+    return true;
+  }
+
+  getShiftXForFigure(figure: { player: string, side: number }): number {
+    if (figure == null) {
+      return 0;
+    }
+    switch (figure.side) {
+      case 0:
+        return 30;
+      case 1:
+        return 60;
+      case 2:
+        return 30;
+      case 3:
+        return 0;
+      case 4:
+        return 30;
+      default:
+        return 0;
+    }
+  }
+
+  getShiftYForFigure(figure: { player: string, side: number }): number {
+    if (figure == null) {
+      return 0;
+    }
+    switch (figure.side) {
+      case 0:
+        return 0;
+      case 1:
+        return 30;
+      case 2:
+        return 60;
+      case 3:
+        return 30;
+      case 4:
+        return 30;
+      default:
+        return 0;
+    }
   }
 
   checkCanPlaceFigure(t: Tile) {
@@ -301,6 +350,19 @@ export class BoardComponent implements OnInit {
       neighbor = null;
     }
     return neighbors;
+  }
+
+  isChurchVisible(tileName: string): string {
+    var specialities = tileName.substring(6);
+
+    for (let i = 0; i < specialities.length; i++) {
+      const character = specialities.charAt(i);
+      if (character == "2") {
+        return "inherit";
+      }
+    }
+
+    return "hidden";
   }
 
   /* Replace callback?? */
