@@ -1,5 +1,6 @@
 <div class="container-fluid">
   <app-stat-table class="stat-table" [tableInfo]="tableInfo"></app-stat-table>
+
   <!-- game board -->
   <div
     class="row"
@@ -24,6 +25,29 @@
         'top.px': tileSize * tileonTable.position.y + shift.y
       }"
     >
+    <div [ngStyle]="{
+        position: 'absolute',
+        height: 'min-content',
+        width: 'min-content',
+        'left.%': getShiftXForFigure(tileonTable.figure),
+        'top.%': getShiftYForFigure(tileonTable.figure),
+        'z-index': '1',
+        overflow: 'hidden'
+      }"
+    >
+      <div
+        *ngIf="isFigureNull(tileonTable.figure)"
+        [ngStyle]="{
+          position: absolute,
+          'width.px': tileSize * 0.4,
+          'height.px': tileSize * 0.4,
+          display: 'block',
+          background: 'url(../assets/meeple.png)',
+          'background-size': 'cover',
+          'background-repeat': 'no-repeat'
+        }"
+      ></div>
+    </div>
       <div
         [ngStyle]="{
           position: absolute,
@@ -48,7 +72,7 @@
           }"
         >
           <button
-            class="btn-sm btn-secondary"
+            class="btn-sm btn-dark figure-button"
             [ngStyle]="{
               'width.px': tileSize * 0.6,
               'height.px': tileSize * 0.2,
@@ -60,7 +84,7 @@
             *ngIf="isButtonActive(0)"
           ></button>
           <button
-            class="btn-sm btn-primary"
+            class="btn-sm btn-dark figure-button"
             [ngStyle]="{
               'width.px': tileSize * 0.2,
               position: 'absolute',
@@ -73,7 +97,7 @@
             *ngIf="isButtonActive(3)"
           ></button>
           <button
-            class="btn-sm btn-info"
+            class="btn-sm btn-dark figure-button"
             [ngStyle]="{
               position: 'absolute',
               'right.px': '0',
@@ -85,7 +109,7 @@
             *ngIf="isButtonActive(1)"
           ></button>
           <button
-            class="btn-sm btn-warning"
+            class="btn-sm btn-dark figure-button"
             [ngStyle]="{
               'width.px': tileSize * 0.6,
               'height.px': tileSize * 0.2,
@@ -95,6 +119,20 @@
             }"
             (click)="placeFigure(2)"
             *ngIf="isButtonActive(2)"
+          ></button>
+          <button
+            class="btn-sm btn-dark figure-button"
+            [ngStyle]="{
+              'width.px': tileSize * 0.6,
+              'height.px': tileSize * 0.6,
+              'margin-top.px': '0',
+              position: 'absolute',
+              'left.px': tileSize * 0.2,
+              'top.px': 0.2 * tileSize,
+              'visibility': isChurchVisible(tileonTable.tile)
+            }"
+            (click)="placeFigure(4)"
+            *ngIf="isButtonActive(4)"
           ></button>
         </div>
       </div>
@@ -123,7 +161,6 @@
         }"
       ></div>
     </div>
-
     <!-- control panel -->
     <div
       class="row fixed-bottom"
