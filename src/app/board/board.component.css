@@ -7,7 +7,12 @@ button.btn {
 	position: absolute;
 	min-width: 15%;
 	margin-left: -10px;
+	margin-top: 5px;
 	z-index: 1;
+}
+
+::ng-deep body {
+    overflow: hidden;
 }
 
 .figure-button {

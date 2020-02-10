@@ -1,9 +1,6 @@
 <div class="container-fluid">
-  <app-stat-table [style.z-index]="2"
-    class="stat-table"
-    [players]="tableInfo.playerInfo"
-    [currentPlayer]="tableInfo.currentPlayer"
-  ></app-stat-table>
+  <app-stat-table class="stat-table" [tableInfo]="tableInfo"></app-stat-table>
+
   <!-- game board -->
   <div
     class="row"
@@ -173,11 +170,11 @@
         <button
           class="btn btn-secondary"
           (click)="getNewTile()"
-          [disabled]="!canGetNewTile ? true : null"
+          [disabled]="!canGetNewTile() ? true : null"
         >
           Get new tile
         </button>
-        <button class="btn btn-warning" (click)="rotate(-90)">
+        <button class="btn btn-warning" (click)="rotate(-90)" [disabled]="hasTile() ? null : true">
           Rotate left
         </button>
       </div>
@@ -198,12 +195,10 @@
         }"
       ></div>
       <div class="col text-left">
-        <button class="btn btn-warning" (click)="rotate(90)">
+        <button class="btn btn-warning" (click)="rotate(90)" [disabled]="hasTile() ? null : true">
           Rotate right
         </button>
-        <button class="btn btn-secondary" (click)="endTurn()">
-          End turn
-        </button>
+        <button class="btn btn-secondary" (click)="endTurn()" [disabled]="!canEndTurn() ? true : null">End turn</button>
       </div>
     </div>
   </div>

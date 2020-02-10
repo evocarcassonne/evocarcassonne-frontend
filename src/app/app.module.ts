@@ -14,8 +14,9 @@ import { WaitingRoomComponent } from "./waiting-room/waitingroom";
 import { CreateComponent } from "./create-game/create.component";
 import { SubscribeComponent } from "./subscribe-game/subscribe.component";
 import { Navbar } from "./navbar/navbar";
-import { ColorGithubModule } from 'ngx-color/github';
 import { StatTableComponent } from './stat-table/stat-table.component';
+import { ColorCircleModule } from 'ngx-color/circle';
+import { AngularSvgIconModule } from 'angular-svg-icon';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { StatTableComponent } from './stat-table/stat-table.component';
     HttpClientModule,
     AngularDraggableModule,
     AppRoutingModule,
-	ColorGithubModule
+    ColorCircleModule,
+    AngularSvgIconModule
   ],
   bootstrap: [AppComponent],
   providers: [CookieService]

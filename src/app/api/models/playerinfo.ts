@@ -3,16 +3,19 @@ export class PlayerInfo {
   numberOfFigures: number;
   name: string;
   points: number;
+  color: string;
 
   constructor(
     playerId: string,
     numberoffigures: number,
     name: string,
-    points: number
+    points: number,
+    color: string
   ) {
     this.playerId = playerId;
     this.name = name;
     this.numberOfFigures = numberoffigures;
     this.points = points;
+    this.color = color;
   }
 }
