@@ -35,18 +35,13 @@
         overflow: 'hidden'
       }"
     >
-      <div
-        *ngIf="isFigureNull(tileonTable.figure)"
+        <svg-icon *ngIf="isFigureNull(tileonTable.figure)"
         [ngStyle]="{
           position: absolute,
           'width.px': tileSize * 0.4,
           'height.px': tileSize * 0.4,
-          display: 'block',
-          background: 'url(../assets/meeple.png)',
-          'background-size': 'cover',
-          'background-repeat': 'no-repeat'
-        }"
-      ></div>
+          display: 'block'
+        }" [svgStyle]="{'fill': getPlayerColor(tileonTable), 'vertical-align': 'baseline'}" src="assets/meeple.svg"></svg-icon>
     </div>
       <div
         [ngStyle]="{

@@ -226,6 +226,17 @@ export class BoardComponent implements OnInit {
     }
   }
 
+  getPlayerColor(tile: Tile) {
+    if (tile != null) {
+      for (let i = 0; i < this.tableInfo.playerInfo.length; i++) {
+        const player = this.tableInfo.playerInfo[i];
+        if (player.name == tile.figure.player) {
+          return player.color;
+        }
+      }
+    }
+  }
+
   canGetNewTile(): boolean {
     try {
       if (this.cookie.get("playerId") != this.tableInfo.currentPlayer.playerId) {

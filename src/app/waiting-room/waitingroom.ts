@@ -64,9 +64,7 @@ export class WaitingRoomComponent implements OnInit {
   }
 
   changeComplete($event: ColorEvent) {
-    this.players.find(e => e.playerId === this.cookie.get("playerId")).color = $event.color.hex
-    this.playerService.setColor(this.gameId, this.cookie.get("playerId"), $event.color.hex, (result: string) => {
-      this.players.find(e => e.playerId === this.cookie.get("playerId")).color = result;
-    });
+    this.players.find(e => e.playerId === this.cookie.get("playerId")).color = $event.color.hex;
+    this.playerService.setColor(this.gameId, this.cookie.get("playerId"), $event.color.hex, () => { });
   }
 }
