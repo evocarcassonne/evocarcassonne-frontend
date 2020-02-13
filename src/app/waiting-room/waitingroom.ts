@@ -10,7 +10,8 @@ import { ColorEvent } from 'ngx-color';
 
 @Component({
   selector: "waiting-room",
-  templateUrl: "./waitingroom.html"
+  templateUrl: "./waitingroom.html",
+  styleUrls: ['./waitingroom.css']
 })
 @Injectable()
 export class WaitingRoomComponent implements OnInit {

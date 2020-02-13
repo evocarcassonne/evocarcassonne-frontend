@@ -1,0 +1,11 @@
+.playerListDiv{
+    border-radius: 12px;
+    background-color: #ffe3c7;
+    color: #38291a;
+    border: none;
+    width: 100%;
+    padding: 10px 10px 5px 15px;
+    font-size: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+    outline: none;
+}

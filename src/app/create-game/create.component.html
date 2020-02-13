@@ -1,74 +1,58 @@
 <div class="container">
-  <div class="row" style="margin-top: 15rem;">
-    <div class="col-lg-2 col-sm-1"></div>
-    <div class="col-lg-8 col-sm-10">
-      <h2 class="text-center" style="margin-bottom: 3rem; margin-top: 3rem;">
-        Here you can register your name and create a new game!
-      </h2>
-      <div md-form>
-        <input
-          class="form-control"
-          [value]="playerName"
-          (input)="playerName = $event.target.value"
-          placeholder="Your Name"
-        />
-        <div class="text-center" style="width: 100%;">
-          <button
-            style="margin-top: 3rem; width: 40%;"
-            class="btn btn-outline-dark btn-lg"
-            (click)="createGame()"
-          >
-            Create game
+  <div class="divstyle">
+    <h2 class="main-text">
+      Here you can register your name and create a new game!
+    </h2>
+    <div md-form>
+      <input
+        class="myInput"
+        [value]="playerName"
+        (input)="playerName = $event.target.value"
+        placeholder="Your Name"
+      />
+
+      <button
+          class="btn"
+          (click)="createGame()"
+        >
+          Create game
+        </button>
+    </div>
+
+    <div class="center">
+      <div
+        [ngClass]="[showSpinner]"
+        role="status"
+      >
+        <span class="sr-only">Loading...</span>
+      </div>
+      <div
+      [ngClass]="[divStyle]"
+      >
+            <h5 class="succes-text">Success</h5>
+            <p class="smaller-text text-justify">
+              Go ahead and invite some friends to play with! You can use the
+              invitation code provided below to invite them!
+            </p>
+            <div class="text-center">
+              <p class="card-text">{{ gameId }}</p>
+              <a
+              class="card-link btn btn-success"
+              (click)="copyText()"
+              value="click to copy"
+              >Copy code</a
+            >
+            </div>
+
+        <div style="margin-top: 20px">
+          <waiting-room [gameId]="gameId" [players]="[]"></waiting-room>
+        </div>
+        <div class="text-center">
+          <button class="btn btn-lg btn-primary" (click)="startGame()">
+            Start
           </button>
         </div>
       </div>
     </div>
-    <div class="col-lg-2 col-sm-1"></div>
-  </div>
-  <div class="row">
-    <div class="col-lg-2 col-sm-1"></div>
-    <div class="col-lg-8 col-sm-10 container-fluid">
-      <div class="center">
-        <div
-          class="spinner-border"
-          [ngStyle]="{ visibility: showSpinner }"
-          role="status"
-        >
-          <span class="sr-only">Loading...</span>
-        </div>
-        <div
-          class="container"
-          [ngStyle]="{ visibility: visibility, 'width.%': 75 }"
-        >
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title text-success">Success</h5>
-              <p class="card-text text-justify" style="margin-top: 2rem;">
-                Go ahead and invite some friends to play with! You can use the
-                invitation code provided below to invite them!
-              </p>
-              <div class="text-center">
-                <p class="card-text">{{ gameId }}</p>
-                <a
-                  class="card-link btn btn-success"
-                  (click)="copyText()"
-                  value="click to copy"
-                  >Copy code</a
-                >
-              </div>
-            </div>
-          </div>
-          <div style="margin-top: 3rem;">
-            <waiting-room [gameId]="gameId" [players]="[]"></waiting-room>
-          </div>
-          <div class="text-center" style="margin-top: 3rem;">
-            <button class="btn btn-lg btn-primary" (click)="startGame()">
-              Start
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-2 col-sm-1"></div>
   </div>
 </div>

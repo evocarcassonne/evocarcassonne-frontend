@@ -10,6 +10,7 @@ import { AppComponent } from "./app.component";
 import { HttpClientModule } from "@angular/common/http";
 import { PlayerComponent } from "./player.component";
 import { BoardComponent } from "./board/board.component";
+import {HomeComponent} from "./home/home.component";
 import { WaitingRoomComponent } from "./waiting-room/waitingroom";
 import { CreateComponent } from "./create-game/create.component";
 import { SubscribeComponent } from "./subscribe-game/subscribe.component";
@@ -28,7 +29,8 @@ import { AngularSvgIconModule } from 'angular-svg-icon';
     SubscribeComponent,
     Navbar,
     WaitingRoomComponent,
-    StatTableComponent
+    StatTableComponent,
+    HomeComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,7 +1,6 @@
-<div class="container">
+<div>
   <div *ngFor="let player of players">
-    <div class="card" style="margin-bottom: 0.5rem;">
-      <div class="card-body">
+    <div class="playerListDiv">
         <div class="row">
           <div class="col-2">
             <svg-icon src="assets/meeple.svg" [svgStyle]="{ 'fill': player.color, 'height': '42px' }"></svg-icon>
@@ -16,7 +15,6 @@
             </button>
           </div>
         </div>
-      </div>
     </div>
   </div>
 </div>

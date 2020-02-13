@@ -1,48 +1,41 @@
-<div class="container">
-  <div class="row" style="margin-top:15rem">
-    <div class="col-lg-2 col-sm-1"></div>
-    <div class="col-lg-8 col-sm-10">
-      <h2 class="text-center" style="margin-bottom: 3rem;">
+<!DOCTYPE html>
+<html>
+  <div class="container">
+    <div class="divstyle">
+      <h2 class="main-text">
         Here you can enter a code and connect the game's waiting room!
       </h2>
-      <div class="container-fluid">
         <div md-form>
           <input
-            class="form-control"
+            class="myInput"
             [value]="gameId"
             (input)="gameId = $event.target.value"
             placeholder="Paste the game's code"
           />
           <input
-            style="margin-top: 1rem; "
-            class="form-control"
+            class="myInput"
             [value]="playerName"
             (input)="playerName = $event.target.value"
             placeholder="Your Name"
           />
-          <div class="text-center" style="width: 100%;">
+          <div class="center">
             <button
-              style="margin-top: 1rem; width: 40%;"
-              class="btn btn-outline-dark btn-lg"
+              class="btn"
               (click)="subscribeGame()"
             >
               Connect game
             </button>
           </div>
         </div>
+
+        <div class="center">
+          <div class="center" [ngClass]="[divStyle]">
+            <h2 class="main-text">Players: </h2>
+            <div>
+              <waiting-room [gameId]="gameId" [players]="[]"></waiting-room>
+            </div>
+          </div>
       </div>
     </div>
-    <div class="col-lg-2 col-sm-1"></div>
   </div>
-  <div class="row">
-    <div class="col-lg-2 col-sm-1"></div>
-    <div class="col-lg-8 col-sm-10 container-fluid">
-      <div class="center" [ngStyle]="{ visibility: visibility }">
-        <div style="margin-top: 3rem;">
-          <waiting-room [gameId]="gameId" [players]="[]"></waiting-room>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-2 col-sm-1"></div>
-  </div>
-</div>
+</html>

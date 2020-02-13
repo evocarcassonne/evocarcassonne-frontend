@@ -1,0 +1,66 @@
+.divstyle{
+    font-size: 23px;
+    color: black;
+    border-radius: 15px;
+    padding: 120px 60px 120px 60px;
+    width: 600px;
+    margin: auto;
+    margin-top: 40px;
+    background-image: url('src/assets/paper-scroll.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    text-align: center;
+}
+
+.main-text{
+    color: black;
+    font-size: 30px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    text-align: center;
+    text-transform: uppercase;
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+.smaller-text{
+    font-size: 20px;
+}
+
+.succes-text{
+    color: green;
+}
+
+.btn{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 12px;
+    font-family: fantasy;
+    text-transform: uppercase;
+    color: #38291a;
+    background-color: #ffe3c7;
+    letter-spacing: 1px;
+    border: 3px solid #38291a;
+ }
+
+ .btn:hover{
+    background-color:#38291a;
+    color: white;
+}
+
+.collapsedDiv{
+    display: none;
+    text-align: center;
+}
+
+.myInput{
+    border-radius: 12px;
+    background-color: #ffe3c7;
+    color: #38291a;
+    border: none;
+    margin-top: 1rem;
+    padding: 10px;
+    width: 100%;
+    font-size: 18px;
+    font-family: Arial, Helvetica, sans-serif;
+    outline: none;
+}
